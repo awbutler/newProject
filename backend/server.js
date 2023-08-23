@@ -15,6 +15,7 @@ app.use(express.json())
 //Sending raw form data
 app.use(express.urlencoded({ extended: true }))
 
+app.use('/api/restaurant', require('./routes/restaurantRoutes'))
 app.use('/api/users', require('./routes/userRoutes'))
 app.use('/api/happy', require('./routes/happyRoutes'))
 
