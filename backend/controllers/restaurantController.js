@@ -46,7 +46,7 @@ const deleteRestaurant = asyncHandler(async (req, res) => {
     throw new Error('Restaurant not found')
   }
 
-  await restaurant.remove()
+  await restaurant.deleteOne()
 
   res.status(200).json({ id: req.params.id })
 })
