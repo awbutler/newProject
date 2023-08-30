@@ -16,6 +16,10 @@ const restaurantSchema = mongoose.Schema(
       enum: [1, 2, 3, 4, 5],
       required: [true, 'please add a number 1-5'],
     },
+    review: {
+      type: String,
+      maxLength: 25,
+    },
   },
   {
     timestamps: true,

@@ -14,14 +14,20 @@ const createRestaurant = asyncHandler(async (req, res) => {
     throw new Error('please add a restaurant')
   }
 
-  if (!req.body.number) {
+  if (!req.body.rating) {
     res.status(400)
     throw new Error('please add a rating 1-5')
   }
 
+  if (req.body.review >= [25]) {
+    res.status(400)
+    throw new Error('please shorten your review to less than 25 characters')
+  }
+
   const restaurant = await Restaurant.create({
     text: req.body.text,
-    number: req.body.rating,
+    rating: req.body.rating,
+    review: req.body.review,
     user: req.user.id,
   })
   res.status(200).json(restaurant)
