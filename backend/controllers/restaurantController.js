@@ -1,9 +1,10 @@
 const asyncHandler = require('express-async-handler')
 
 const Restaurant = require('../models/restaurantModel')
+const User = require('../models/userModel')
 
 const getRestaurants = asyncHandler(async (req, res) => {
-  const restaurants = await Restaurant.find()
+  const restaurants = await Restaurant.find({ user: req.user.id })
   res.status(200).json(restaurants)
 })
 
@@ -13,8 +14,15 @@ const createRestaurant = asyncHandler(async (req, res) => {
     throw new Error('please add a restaurant')
   }
 
+  if (!req.body.number) {
+    res.status(400)
+    throw new Error('please add a rating 1-5')
+  }
+
   const restaurant = await Restaurant.create({
     text: req.body.text,
+    number: req.body.rating,
+    user: req.user.id,
   })
   res.status(200).json(restaurant)
 })
@@ -25,6 +33,18 @@ const updateRestaurant = asyncHandler(async (req, res) => {
   if (!restaurant) {
     res.status(400)
     throw new Error('Restaurant not found')
+  }
+
+  const user = await User.findById(req.user.id)
+
+  if (!user) {
+    res.status(401)
+    throw new Error('User not found')
+  }
+
+  if (restaurant.user.toString() !== user.id) {
+    res.status(401)
+    throw new Error('user not authorized')
   }
 
   const updatedRestaurant = await Restaurant.findByIdAndUpdate(
@@ -44,6 +64,18 @@ const deleteRestaurant = asyncHandler(async (req, res) => {
   if (!restaurant) {
     res.status(400)
     throw new Error('Restaurant not found')
+  }
+
+  const user = await User.findById(req.user.id)
+
+  if (!user) {
+    res.status(401)
+    throw new Error('User not found')
+  }
+
+  if (restaurant.user.toString() !== user.id) {
+    res.status(401)
+    throw new Error('user not authorized')
   }
 
   await restaurant.deleteOne()

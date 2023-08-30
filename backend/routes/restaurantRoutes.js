@@ -7,7 +7,12 @@ const {
   deleteRestaurant,
 } = require('../controllers/restaurantController')
 
-router.route('/').get(getRestaurants).post(createRestaurant)
-router.route('/:id').delete(deleteRestaurant).put(updateRestaurant)
+const { protect } = require('../middleware/authMiddleware')
+
+router.route('/').get(protect, getRestaurants).post(protect, createRestaurant)
+router
+  .route('/:id')
+  .delete(protect, deleteRestaurant)
+  .put(protect, updateRestaurant)
 
 module.exports = router
