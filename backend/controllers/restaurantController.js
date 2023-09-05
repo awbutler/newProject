@@ -19,7 +19,7 @@ const createRestaurant = asyncHandler(async (req, res) => {
     throw new Error('please add a rating 1-5')
   }
 
-  if (req.body.review >= [25]) {
+  if (req.body.review.length >= [25]) {
     res.status(400)
     throw new Error('please shorten your review to less than 25 characters')
   }
