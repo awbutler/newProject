@@ -41,14 +41,12 @@ const updateRestaurant = asyncHandler(async (req, res) => {
     throw new Error('Restaurant not found')
   }
 
-  const user = await User.findById(req.user.id)
-
-  if (!user) {
+  if (!req.user) {
     res.status(401)
     throw new Error('User not found')
   }
 
-  if (restaurant.user.toString() !== user.id) {
+  if (restaurant.user.toString() !== req.user.id) {
     res.status(401)
     throw new Error('user not authorized')
   }
@@ -72,14 +70,12 @@ const deleteRestaurant = asyncHandler(async (req, res) => {
     throw new Error('Restaurant not found')
   }
 
-  const user = await User.findById(req.user.id)
-
-  if (!user) {
+  if (!req.user) {
     res.status(401)
     throw new Error('User not found')
   }
 
-  if (restaurant.user.toString() !== user.id) {
+  if (restaurant.user.toString() !== req.user.id) {
     res.status(401)
     throw new Error('user not authorized')
   }
